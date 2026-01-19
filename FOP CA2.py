@@ -88,6 +88,7 @@ while (True):
                                          ac = open(filepath, 'w')
                                          for x in amend:
                                              ac.write(','.join(x) + '\n')
+                                         print("Edit Complete")
                                 
 
                                          
@@ -107,7 +108,51 @@ while (True):
         print ('4')
         break
     elif option =='5':
-        print ('5')
+        fp = 'cryptocurrency.txt'
+        fp1 = open(fp,'r')
+        fp2 = fp1.readlines()
+        
+        fp3 = [q.strip() for q in fp2]
+        fp4 = []
+        for w in range(len(fp3)):
+            e = fp3[w].split(',')
+            fp4.append(e) 
+        fp4[0].append('Total Invested')
+        fp4[0].append('Invested Portfolio Size')
+        fp4[0].append('Total Current Value')
+        fp4[0].append('Profit/Loss')
+        fp4[0].append('Current Portfolio Size')
+        sumofti = []
+        for r in range (len(fp4)-1):
+            ti = float(fp4[r+1][4])*float(fp4[r+1][3])
+            fp4[r+1].append(ti)
+            sumofti.append(ti)
+        soti = sum(sumofti)
+        for t in range (len(fp4)-1):
+            ips = (fp4[t+1][6]/soti)*100
+            ips1 = round(ips,2)
+            fp4[t+1].append(str(ips1)+('%'))
+        totcurval=[]
+        for u in range(len(fp4)-1):
+            tcv = float(fp4[u+1][3])*float(fp4[u+1][5])
+            fp4[u+1].append(tcv)
+            totcurval.append(tcv)
+        profloss = []
+        for i in range(len(fp4)-1):
+            pl = fp4[i+1][8]-fp4[i+1][6]
+            fp4[i+1].append(pl)
+            profloss.append(pl)
+        for o in range(len(fp4)-1):
+            cps = (fp4[o+1][8]/sum(totcurval))*100
+            cps1= round(cps,2)
+            fp4[o+1].append(str(cps1)+'%')
+        for p in range(len(fp4)):
+            del fp4[p][2]
+        
+        for row in fp4:
+            print('{:<10}{:<15}{:<12}{:<12}{:<14}{:<15}{:<22}{:<20}{:<12}{:<22}'.format(*row))
+        
+
         break
     elif option == '6':
         print ('6')
