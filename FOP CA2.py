@@ -24,7 +24,54 @@ while (True):
             
         break
     elif option =='2':
-        print ('2')
+        import pandas as pd
+        filename= 'cryptocurrency.txt'
+        df=pd.read_csv('cryptocurrency.txt')
+
+        name= input('Enter Cryptocurrency name: ')
+        next_number = df["Number"].max() + 1
+
+        while True:
+         marketcap = input('Enter Market Cap of Crypto: High, Mid, Low: ').capitalize()
+         if marketcap in ["High", "Mid", "Low"]:
+          break
+         else:
+          print('Invalid input')
+
+        
+        while True:
+         quantity= float(input('Enter Quantity of Crypto Bought: '))
+
+         if quantity > 0:
+                break
+         else:
+            print('Invalid input')
+        
+        while True:
+         bp= float(input('Enter Buy in Price of Crypto: '))
+
+         if bp > 0:
+              break
+         else:
+              print('Price must be greater than 0')
+
+        while True:
+         cp= float(input('Enter Current Price of Crypto: '))
+
+         if cp > 0:
+              break
+         else:
+              print('Price must be greater than 0')
+        new_crypto = pd.DataFrame([{
+    "Number": next_number,
+    "Name": name,
+    "Capitalization": marketcap,
+    "QtyBought": quantity,
+    "BoughtPrice": bp,
+    "CurrentPrice": cp
+}])
+        df = pd.concat([df, new_crypto], ignore_index=True)
+        df.to_csv(filename, index=False)
         break
     elif option =='3':
         listforedit = ['Name','Market Cap','Quantity Bought','Buy in Price','Market Price']
@@ -163,5 +210,6 @@ while (True):
     elif option.upper()== 'E':
         print('You have chosen to exit')
         break
+
 
 #hj function - find live data last 6 months etc put into a graph and compare 2 different coins
