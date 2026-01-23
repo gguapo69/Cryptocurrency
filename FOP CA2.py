@@ -154,7 +154,48 @@ while (True):
         break
         
     elif option == '4':
-        print ('4')
+        filepath = 'cryptocurrency.txt'
+        f = open(filepath, 'r')
+        lines = f.readlines()
+        f.close()
+
+        records = []
+        for line1 in lines:
+            records.append(line1.strip().split(','))
+
+        header = records[0]
+        data = records[1:]
+
+        while True:
+            print(line)
+            print("No - Cryptocurrency")
+            for i in range(len(data)):
+                print(i+1, '-', data[i][1])
+            print(line)
+            choice = input('Enter number to delete or E to exit: ')
+
+            if choice.upper() == 'E':
+                print('You have chosen to exit.')
+                break
+            else:
+                try:
+                    num = int(choice)
+                    if 1 <= num <= len(data):
+                        del data[num-1]
+
+                        f = open(filepath, 'w')
+                        f.write(','.join(header) + '\n')
+                        for i in range(len(data)):
+                            data[i][0] = str(i+1)  # re-number
+                            f.write(','.join(data[i]) + '\n')
+                        f.close()
+
+                        print("Cryptocurrency deleted successfully.")
+                        break
+                    else:
+                        print("Invalid number.")
+                except:
+                    print("Please enter a number or E.")
         break
     elif option =='5':
         fp = 'cryptocurrency.txt'
@@ -215,3 +256,4 @@ while (True):
 
 
 #hj function - find live data last 6 months etc put into a graph and compare 2 different coins
+
