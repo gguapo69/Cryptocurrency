@@ -20,7 +20,7 @@ while (True):
             z = cdisplay[x].split(',')
             display.append(z)
         for row in display:
-            print ('{:<8} {:<15} {:<15} {:<10} {:<12} {:<12}'.format(*row))
+            print ('{:<7} {:<14} {:<15} {:<10} {:<12} {:<12}'.format(*row))
             
         break
     elif option =='2':
@@ -240,7 +240,7 @@ while (True):
             del fp4[p][2]
         
         for row in fp4:
-            print('{:<10}{:<15}{:<12}{:<12}{:<14}{:<15}{:<22}{:<20}{:<12}{:<22}'.format(*row))
+            print('{:<8}{:<14}{:<11}{:<13}{:<14}{:<16}{:<25}{:<21}{:<13}{:<22}'.format(*row))
         
 
         break
@@ -255,5 +255,5 @@ while (True):
         break
 
 
-#hj function - find live data last 6 months etc put into a graph and compare 2 different coins
-
+#hj function - find live data last 6 months etc put into a graph and compare 2 different crypto
+#            - use api
