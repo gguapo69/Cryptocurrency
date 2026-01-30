@@ -24,54 +24,53 @@ while (True):
             
         break
     elif option =='2':
-        import pandas as pd
-        filename= 'cryptocurrency.txt'
-        df=pd.read_csv('cryptocurrency.txt')
+        filename = "cryptocurrency.txt"
 
-        name= input('Enter Cryptocurrency name: ')
-        next_number = df["Number"].max() + 1
+        with open(filename, "r") as file:
+         lines = file.readlines()
+
+        last_line = lines[-1].strip().split(",")
+        next_number = int(last_line[0]) + 1
+
+        name = input("Enter Cryptocurrency name: ")
 
         while True:
-         marketcap = input('Enter Market Cap of Crypto: High, Mid, Low: ').capitalize()
+         marketcap = input("Enter Market Cap of Crypto (High, Mid, Low): ").capitalize()
          if marketcap in ["High", "Mid", "Low"]:
-          break
-         else:
-          print('Invalid input')
-
+             break
+        else:
+            print("Invalid input")
         
-        while True:
-         quantity= float(input('Enter Quantity of Crypto Bought: '))
 
-         if quantity > 0:
+        while True:
+            try:
+                quantity= float(input("Enter the Quantity of Crypto Bought: "))
+                if quantity > 0:
+                    break
+                print("Invalid input")
+            except:
+                print("Invalid input")
+
+        while True:
+            try:
+                bp=float(input("Enter Buy in Price of Crypto: "))
+                if bp > 0:
+                    break
+                print("Price must be greater than zero")
+            except:
+                print("Invalid input")
+        while True:
+            cp=float(input("Enter Current Price of Crypto: "))
+            if cp > 0:
                 break
-         else:
-            print('Invalid input')
+            print("Invalid input")
         
-        while True:
-         bp= float(input('Enter Buy in Price of Crypto: '))
+        new_line = f"{next_number},{name},{marketcap},{quantity},{bp},{cp}\n"
 
-         if bp > 0:
-              break
-         else:
-              print('Price must be greater than 0')
+        with open(filename, "a") as file:
+            file.write(new_line)
 
-        while True:
-         cp= float(input('Enter Current Price of Crypto: '))
-
-         if cp > 0:
-              break
-         else:
-              print('Price must be greater than 0')
-        new_crypto = pd.DataFrame([{
-    "Number": next_number,
-    "Name": name,
-    "Capitalization": marketcap,
-    "QtyBought": quantity,
-    "BoughtPrice": bp,
-    "CurrentPrice": cp
-}])
-        df = pd.concat([df, new_crypto], ignore_index=True)
-        df.to_csv(filename, index=False)
+        print("New cryptocurrency record added successfully.")
         break
         
         
@@ -256,4 +255,5 @@ while (True):
 
 
 #hj function - find live data last 6 months etc put into a graph and compare 2 different coins
+
 
