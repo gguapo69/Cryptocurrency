@@ -1,5 +1,8 @@
 #Program needs to remember changes = use chapter 6 
-
+import requests
+import pandas as pd
+import math
+import random
     
 
 line = '---------------------------------------------------------------------------'
@@ -247,13 +250,85 @@ while (True):
         print ('6')
         break
     elif option =='7':
-        print ('7')
+        print("Running Cryto Simulation")
+
+        coins = {
+        "bitcoin": "bitcoin",
+        "ethereum": "ethereum",
+        "solana": "solana",
+        "decentraland": "decentraland",
+        "the sandbox": "the-sandbox",
+        "dogecoin": "dogecoin",
+        "shiba inu": "shiba-inu"
+    }
+        days = 180
+        forecast_days= 30
+
+        all_historical= []
+        all_forecast= []
+
+        for name, coin_id in coins.items():
+            url = f"https://api.coingecko.com/api/v3/coins/{coin_id}/market_chart"
+        params = {
+            "vs_currency": "usd",
+            "days": days,
+            "interval": "daily"
+        }
+        
+        response = requests.get(url, params=params)
+        data = response.json()
+
+        if "prices" not in data:
+            print(f"Error fetching data for {coin_id}: {data}")
+            continue
+
+        prices = data["prices"]
+        df = pd.DataFrame(prices, columns=["timestamp", "close"])
+        df["timestamp"] = pd.to_datetime(df["timestamp"], unit="ms")
+        df["coin"] = name
+
+        df["log_return"] = df["close"].apply(math.log) - df["close"].shift(1).apply(math.log)
+        df = df.dropna()
+
+        mu = df["log_return"].mean()
+        sigma = df["log_return"].std()
+
+        last_price = df["close"].iloc[-1]
+        future_prices = []
+        current_price = last_price
+
+        for _ in range(forecast_days):
+             z = random.gauss(0, 1)
+             next_price = current_price * math.exp(mu + sigma * z)
+             future_prices.append(next_price)
+             current_price = next_price
+             
+        last_date = df["timestamp"].iloc[-1]
+        future_dates = pd.date_range(start=last_date, periods=forecast_days + 1, freq="D")[1:]
+        forecast_df = pd.DataFrame({
+            "timestamp": future_dates,
+            "forecast_price": future_prices,
+            "coin": name
+        })
+
+        all_historical.append(df)
+        all_forecast.append(forecast_df)
+
+        final_historical = pd.concat(all_historical, ignore_index=True)
+        final_forecast = pd.concat(all_forecast, ignore_index=True)
+
+        final_historical.to_csv("all_crypto_historical.csv", index=False)
+        final_forecast.to_csv("all_crypto_forecast.csv", index=False)
+
+        print("Saved all_crypto_historical.csv and all_crypto_forecast.csv")
         break
+        
     elif option.upper()== 'E':
         print('You have chosen to exit')
         break
 
 
 #hj function - find live data last 6 months etc put into a graph and compare 2 different coins
+
 
 
